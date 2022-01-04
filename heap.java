@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 public class heap{
     private ArrayList<Integer>arr;
+    private boolean ismax;
     // o(n+nlogn)->o(n)
-    public heap(int[]arr){
+    public heap(int[]arr,boolean ismax){
         this.arr=new ArrayList<>();
+        this.ismax=ismax;
         // ArrayList ko new bhi toh karna hai 
         for(int a:arr){
             this.arr.add(a);
@@ -21,7 +23,12 @@ public class heap{
     }
     // O(1)
     private boolean compareTo(int x,int y){
-        return this.arr.get(x)>this.arr.get(y);
+        if(ismax){
+            return this.arr.get(x)>this.arr.get(y);
+        }
+        else{
+            return this.arr.get(y)>this.arr.get(x);
+        }
     }
     // O(1)
     public int size(){
