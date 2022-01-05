@@ -149,4 +149,142 @@ public class heapquestions{
         }
         return ans;
     }
+    // 973. K Closest Points to Origin
+    // index added in pq and sorted on basis of dis from origin 
+    public int[][] kClosest(int[][] points, int k) {
+        PriorityQueue<Integer>pq=new PriorityQueue<>((a,b)->{
+            int d1=points[a][0]*points[a][0]+points[a][1]*points[a][1];
+            int d2=points[b][0]*points[b][0]+points[b][1]*points[b][1];
+            return d2-d1;
+        });
+        for(int i=0;i<points.length;i++){
+            pq.add(i);
+            if(pq.size()>k){
+                pq.remove();
+            }
+        }
+        int[][]ans=new int[k][];
+        int li=0;
+        while(pq.size()!=0){
+            int idx=pq.remove();
+            ans[li++]=points[idx];
+        }
+        return ans;
+    }
+    // x and y coordinates added in pq and sorted on the basis of dis from origin 
+    public int[][] kClosest(int[][] points, int k) {
+        PriorityQueue<int[]>pq=new PriorityQueue<>((a,b)->{
+            int d1=a[0]*a[0]+a[1]*a[1];
+            int d2=b[0]*b[0]+b[1]*b[1];
+            return d2-d1;
+        });
+        for(int[]p:points){
+            pq.add(new int[]{p[0],p[1]});
+            if(pq.size()>k){
+                pq.remove();
+            }
+        }
+        int[][]ans=new int[k][];
+        int idx=0;
+        while(pq.size()!=0){
+            int[]d=pq.remove();
+            ans[idx++]=d;
+        }
+        return ans;
+    }
+// 692. Top K Frequent Words
+// O(NlogK)
+    public List<String> topKFrequent(String[] words, int k) {
+        HashMap<String,Integer>map=new HashMap<>();
+        for(String s:words){
+            if(map.containsKey(s)){
+                map.put(s,map.get(s)+1);
+            }
+            else{
+                map.put(s,1);
+            }
+        }
+        PriorityQueue<String>pq=new PriorityQueue<>((a,b)->{
+            if(map.get(a)==map.get(b)){
+                return b.compareTo(a);
+            }
+            return map.get(a)-map.get(b);
+        });
+        for(String key:map.keySet()){
+            pq.add(key);
+            if(pq.size()>k){
+                pq.remove();
+            }
+        }
+        List<String>ans=new LinkedList<>();
+        while(pq.size()!=0){
+            ans.add(0,pq.remove());
+        }
+        return ans;
+    }
+     public List<String> topKFrequent(String[] words, int k) {
+        HashMap<String,Integer>map=new HashMap<>();
+        for(String s:words){
+            if(map.containsKey(s)){
+                map.put(s,map.get(s)+1);
+            }
+            else{
+                map.put(s,1);
+            }
+        }
+        PriorityQueue<String>pq=new PriorityQueue<>((a,b)->{
+            if(map.get(a)==map.get(b)){
+                return b.compareTo(a);
+            }
+            return map.get(a)-map.get(b);
+        });
+        for(String key:map.keySet()){
+            pq.add(key);
+            if(pq.size()>k){
+                pq.remove();
+            }
+        }
+        LinkedList<String>ans=new LinkedList<>();
+        while(pq.size()!=0){
+            ans.addFirst(pq.remove());
+        }
+        return ans;
+    }
+    // 778. Swim in Rising Water
+    public int swimInWater(int[][] grid) {
+        int[][]dir={{0,1},{1,0},{0,-1},{-1,0}};
+        int n=grid.length;
+        int m=grid[0].length;
+        PriorityQueue<Integer>pq=new PriorityQueue<>((a,b)->{
+            int i1=a/m;
+            int j1=a%m;
+            int i2=b/m;
+            int j2=b%m;
+            return grid[i1][j1]-grid[i2][j2];
+        });
+        int minheight=0;
+        boolean[][]vis=new boolean[n][m];
+        pq.add(0);
+        vis[0][0]=true;
+        while(pq.size()!=0){
+            int idx=pq.remove();
+            int i=idx/m;
+            int j=idx%m;
+            int height=grid[i][j];
+            minheight=Math.max(minheight,height);
+            if(i==n-1 && j==m-1){
+                break;
+                // reached dest 
+            }
+            for(int d=0;d<4;d++){
+                int r=i+dir[d][0];
+                int c=j+dir[d][1];
+                if(r>=0 && c>=0 && r<n && c<m && vis[r][c]==false){
+                    vis[r][c]=true;
+                    pq.add(r*m+c);
+                }
+            }
+        }
+        return minheight;
+    }
 }
