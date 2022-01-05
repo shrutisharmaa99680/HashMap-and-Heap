@@ -287,4 +287,58 @@ public class heapquestions{
         }
         return minheight;
     }
+    // O(NlogL) l-> length of ladder 1642. Furthest Building You Can Reach
+    public int furthestBuilding(int[] heights, int bricks, int ladders) {
+        int n=heights.length;
+        PriorityQueue<Integer>pq=new PriorityQueue<>();
+        for(int i=1;i<n;i++){
+            int diff=heights[i]-heights[i-1];
+            if(diff>0){
+            pq.add(diff);
+            if(pq.size()>ladders){
+                bricks-=pq.remove();
+            }
+            }
+            if(bricks<0){
+                return i-1;
+            }
+        }
+        return n-1;
+    }
+    // 632. Smallest Range Covering Elements from K Lists
+     public int[] smallestRange(List<List<Integer>> nums) {
+        int n=nums.size();
+        PriorityQueue<int[]>pq=new PriorityQueue<>((a,b)->{
+            int r1=a[0];
+            int c1=a[1];
+            int r2=b[0];
+            int c2=b[1];
+            return nums.get(r1).get(c1)-nums.get(r2).get(c2);
+        });
+        int maxvalue=-(int)1e9;
+        for(int i=0;i<n;i++){
+            pq.add(new int[]{i,0});
+            maxvalue=Math.max(maxvalue,nums.get(i).get(0));
+        }
+        int range=(int)1e9;
+        int sp=-1;
+        int ep=-1;
+        while(pq.size()==n){
+            int[]re=pq.remove();
+            int r=re[0];
+            int c=re[1];
+            int val=nums.get(r).get(c);
+            if(maxvalue-val<range){
+                range=maxvalue-val;
+                sp=val;
+                ep=maxvalue;
+            }
+            c++;
+            if(c<nums.get(r).size()){
+                pq.add(new int[]{r,c});
+                maxvalue=Math.max(maxvalue,nums.get(r).get(c));
+            }
+        }
+        return new int[]{sp,ep};
+    }
 }
